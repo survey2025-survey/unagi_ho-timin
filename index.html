@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Survey</title>
+  <link rel="stylesheet" href="reset.css">
+  <link rel="stylesheet" href="styles.css" />
+  <script src="script.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Please help us improve</h1>
+    <h2 class="logo" onclick="restartSurvey()">
+      <img src="img/logo.png" alt="">
+    </h2>
+
+    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="onLoad()"></iframe>
+    <form
+      action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSf3cL5sMiuXm6Opa8CGWFyzgiwoAZ4roNoyXXgCcsju1Q9esg/formResponse"
+      method="post" class="" id="" target="hidden_iframe" onsubmit="submitted=true" onload="onLoad()">
+      <div id="question1" class="question">
+        <select id="country-select" onchange="selectCountry(this.value)" name="entry.198192134">
+          <option value="">Select a country</option>
+          <option value="japan">Japan</option>
+          <option value="vietnam">Vietnam</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <div id="question1_5" class="question hidden">
+        <select id="visit-count-select" onchange="selectVisitCount(this.value)" name="entry.2054495886">
+          <option value="">How many times have you visited?</option>
+          <option value="first">First time</option>
+          <option value="2">2 times</option>
+          <option value="3">3 times</option>
+          <option value="4">4 times</option>
+          <option value="5">5 times or more</option>
+        </select>
+      </div>
+
+      <div id="question2" class="question hidden">
+        <p>How was your experience at Japanese Unagi YOSAKURA today?</p>
+        <div id="feedbackForm">
+          <div class="custom-select">
+            <select id="experience-select" name="entry.1413243812" style="display: none;">
+              <option value="">Select your experience</option>
+              <option value="BAD">Bad</option>
+              <option value="NOT GOOD">Not Good</option>
+              <option value="OKAY">Okay</option>
+              <option value="GOOD">Good</option>
+              <option value="WOW！">Wow</option>
+            </select>
+            <div class="select-items">
+              <div class="select-item" data-value="BAD">
+                <img src="img/1.png" alt="Bad" class="emoji bad" />
+                <span>BAD</span>
+              </div>
+              <div class="select-item" data-value="NOT GOOD">
+                <img src="img/2.png" alt="Not Good" class="emoji not-good" />
+                <span>NOT GOOD</span>
+              </div>
+              <div class="select-item" data-value="OKAY">
+                <img src="img/3.png" alt="Okay" class="emoji okay" />
+                <span>OKAY</span>
+              </div>
+              <div class="select-item" data-value="GOOD">
+                <img src="img/4.png" alt="Good" class="emoji good" />
+                <span>GOOD</span>
+              </div>
+              <div class="select-item" data-value="WOW！">
+                <img src="img/5.png" alt="Wow" class="emoji wow" />
+                <span>WOW!</span>
+              </div>
+            </div>
+          </div>
+          <input type="submit" value="End" class="submit" onclick="submitFeedback(this.form)" style="display: none;" />
+        </div>
+      </div>
+
+
+      <div id="question3" class="question hidden">
+        <p>If you have any feedback on areas for improvement regarding our service, please let us know.</p>
+        <ul class="checkbox-list">
+          <li>
+            <label id="label1" class="custom-checkbox">
+              <input type="checkbox" value="Reservation method is not satisfactory" name="entry.905928091">
+              Reservation method is not satisfactory
+            </label>
+          </li>
+          <li>
+            <label id="label2" class="custom-checkbox">
+              <input type="checkbox" value="Atmosphere is not good" name="entry.905928091">
+              Atmosphere is not good
+            </label>
+          </li>
+          <li>
+            <label id="label3" class="custom-checkbox">
+              <input type="checkbox" value="Service is not satisfactory" name="entry.905928091">
+              Service is not satisfactory
+            </label>
+          </li>
+          <li>
+            <label id="label4" class="custom-checkbox">
+              <input type="checkbox" value="Food is not tasty" name="entry.905928091">
+              Food is not tasty
+            </label>
+          </li>
+          <li>
+            <label id="label5" class="custom-checkbox">
+              <input type="checkbox" value="Food is slow to arrive" name="entry.905928091">
+              Food is slow to arrive
+            </label>
+          </li>
+          <li>
+            <label id="label6" class="custom-checkbox">
+              <input type="checkbox" value="Drinks are slow to arrive" name="entry.905928091">
+              Drinks are slow to arrive
+            </label>
+          </li>
+          <li>
+            <label id="label7" class="custom-checkbox">
+              <input type="checkbox" value="Everything was good with no issues" name="entry.905928091">
+              Everything was good with no issues
+            </label>
+          </li>
+        </ul>
+        <button type="button">Next</button>
+      </div>
+
+      <div id="question4" class="question hidden">
+        <p>If there are specific areas to improve, please provide details below.</p>
+        <textarea name="entry.225343563" id="" rows="7" cols="45"></textarea>
+        <input type="submit" value="Send" class="submit submit_btn" onclick="submitFeedback(this.form)" />
+      </div>
+
+      <div id="thankYou" class="hidden">
+        <p>Thank you for your feedback. <br> We will use your comments to make improvements and create a better <br>
+          experience
+          for our guests.</p>
+        <div id="selectedEmoji"></div>
+
+        <!-- <button type="button">Start New Survey</button> -->
+      </div>
+
+  </div>
+  <script>
+
+
+
+
+    function submitFeedback(form) {
+      if (form.checkValidity()) {
+        const selectedValue = form.elements['entry.1413243812'].value;
+
+        if (selectedValue === "WOW！") {
+          console.log("Submitting positive feedback:", selectedValue);
+          const selectedEmoji = document.querySelector(`.select-item[data-value="${selectedValue}"] img`).cloneNode(true);
+          form.submit(); // フォームを送信
+          showThankYou(selectedEmoji);
+        } else {
+          console.log("Moving to next question for feedback:", selectedValue);
+          showNextQuestion(selectedValue);
+        }
+      } else {
+        form.reportValidity();
+      }
+    }
+
+    function showThankYou(selectedEmoji) {
+      document.getElementById("question2").classList.add("hidden");
+      const thankYouDiv = document.getElementById("thankYou");
+      thankYouDiv.classList.remove("hidden");
+
+      const selectedEmojiDiv = document.getElementById("selectedEmoji");
+      selectedEmojiDiv.innerHTML = '';
+      if (selectedEmoji) {
+
+        selectedEmojiDiv.appendChild(selectedEmoji);
+      }
+    }
+
+    function showNextQuestion(selectedValue) {
+      const logoElement = document.querySelector('h2.logo');
+
+      // display: noneを適用
+      if (logoElement) {
+        logoElement.style.display = 'none';
+      }
+
+      document.getElementById("question2").classList.add("hidden");
+      const question3Div = document.getElementById("question3");
+      question3Div.classList.remove("hidden");
+
+
+      // Add event listener to the Next button
+      const nextButton = question3Div.querySelector("button");
+      nextButton.onclick = submitQuestion3;
+    }
+
+
+
+    // question1-5の選択で次の質問に進む
+    function selectVisitCount(value) {
+      if (value) {
+        document.getElementById('question1_5').classList.add('hidden');
+        document.getElementById('question2').classList.remove('hidden');
+      }
+    }
+
+    // question1-5のselectにonchangeイベントを追加
+    document.addEventListener('DOMContentLoaded', function () {
+      const visitSelect = document.querySelector('#question1_5 select');
+      if (visitSelect) {
+        visitSelect.addEventListener('change', function () {
+          selectVisitCount(this.value);
+        });
+      }
+    });
+
+
+    function submitQuestion3() {
+      // Here you can process the checkboxes if needed
+      console.log("Submitting feedback for question 3");
+
+      // Move to question 4
+      showQuestion4();
+    }
+
+    function showQuestion4() {
+      document.getElementById("question3").classList.add("hidden");
+      const logoElement = document.querySelector('h2.logo');
+
+      const question4Div = document.getElementById("question4");
+      question4Div.classList.remove("hidden");
+
+      // Add event listener to the End button
+      const endButton = question4Div.querySelector("input");
+      endButton.onclick = submitQuestion4;
+    }
+
+    function submitQuestion4() {
+
+      const logoElement = document.querySelector('h2.logo');
+      const goodSelectedElement = document.querySelector('.select-item[data-value="GOOD"].selected');
+
+
+      // display: noneを適用
+      if (logoElement) {
+        logoElement.style.display = 'block';
+      }
+      // Here you can process the textarea input if needed
+      console.log("Submitting feedback for question 4");
+
+      if (goodSelectedElement) {
+        const selectedEmojiDiv = document.getElementById("selectedEmoji");
+        selectedEmojiDiv.innerHTML = '';
+
+        const imgElement = document.createElement("img");
+        imgElement.src = "img/4.png";
+        imgElement.alt = "Good";
+        imgElement.className = "emoji good";
+
+        console.log(imgElement);
+
+        selectedEmojiDiv.appendChild(imgElement);
+        console.log(selectedEmojiDiv);
+
+      }
+
+      // Show Thank You message
+      showThankYou();
+    }
+
+    function showThankYou(selectedEmoji = null) {
+      document.getElementById("question2").classList.add("hidden");
+      document.getElementById("question3").classList.add("hidden");
+      document.getElementById("question4").classList.add("hidden");
+
+      const thankYouDiv = document.getElementById("thankYou");
+      thankYouDiv.classList.remove("hidden");
+
+      const selectedEmojiDiv = document.getElementById("selectedEmoji");
+      // selectedEmojiDiv.innerHTML = '';
+
+      if (selectedEmoji) {
+        selectedEmojiDiv.appendChild(selectedEmoji);
+      }
+    }
+
+    function restartSurvey() {
+      // 全ての質問とThank Youメッセージを非表示にする
+      document.getElementById('question1').classList.remove('hidden');
+      document.getElementById('question2').classList.add('hidden');
+      document.getElementById('question3').classList.add('hidden');
+      document.getElementById('question4').classList.add('hidden');
+      document.getElementById('thankYou').classList.add('hidden');
+
+      // 選択をリセット
+      document.getElementById('country-select').value = '';
+      document.getElementById('experience-select').value = '';
+      document.querySelectorAll('.select-item').forEach(item => item.classList.remove('selected'));
+
+      document.querySelectorAll('input[name="entry.905928091"]').forEach(checkbox => {
+        checkbox.checked = false;
+        // チェックボックスの親要素（label）から 'checked' クラスを削除
+        checkbox.closest('.custom-checkbox').classList.remove('checked');
+      });
+
+      // 質問4のテキストエリアをリセット
+      document.querySelector('textarea[name="entry.225343563"]').value = '';
+
+      const selectedEmojiDiv = document.getElementById("selectedEmoji");
+      selectedEmojiDiv.innerHTML = '';
+
+      // 最初の質問を表示
+      showQuestion1();
+    }
+
+    function showQuestion1() {
+      document.getElementById('question1').classList.remove('hidden');
+      document.getElementById('question2').classList.add('hidden');
+      document.getElementById('thankYou').classList.add('hidden');
+    }
+
+    function selectCountry(value) {
+      console.log(3);
+      if (value) {
+        const questionElement1 = document.querySelector('#question2 p');
+        const questionElement1_5Select = document.querySelector('#question1_5 select');
+        const questionElement2 = document.querySelector('#question3 p');
+        const questionElement3 = document.querySelector('#question4 p');
+        const questionElement4 = document.querySelector('#thankYou p');
+
+        // ラベルを更新する関数
+        function updateLabel(labelId, newText) {
+          const label = document.querySelector(`#${labelId}`);
+          if (label) {
+            const input = label.querySelector('input');
+            if (input) {
+              label.innerHTML = '';
+              label.appendChild(input);
+              label.appendChild(document.createTextNode(newText));
+            }
+          }
+        }
+
+        // 訪問回数のオプションを更新
+        function updateVisitOptions(options) {
+          questionElement1_5Select.innerHTML = ''; // 一旦クリア
+          options.forEach(opt => {
+            const option = document.createElement('option');
+            option.value = opt.value;
+            option.textContent = opt.text;
+            questionElement1_5Select.appendChild(option);
+          });
+        }
+
+        switch (value) {
+          case 'japan':
+            questionElement1.innerHTML = '本日のUNAGIYOSAKURAでの体験はいかがでしたか？';
+            updateVisitOptions([
+              { value: '', text: '何回目の来店ですか' },
+              { value: 'first', text: '初めて' },
+              { value: '2', text: '2回目' },
+              { value: '3', text: '3回目' },
+              { value: '4', text: '4回目' },
+              { value: '5', text: '5回以上' }
+            ]);
+            questionElement2.innerHTML = 'サービスに関する改善点についてフィードバックがあれば、お知らせください。';
+            updateLabel('label1', '予約の方法がよくない');
+            updateLabel('label2', 'サービスが良くない');
+            updateLabel('label3', '料理がおいしくない');
+            updateLabel('label4', '料理が遅い');
+            updateLabel('label5', '飲み物が遅い');
+            updateLabel('label6', '問題はなく全て良かった');
+            questionElement3.innerHTML = '改善すべき点がありましたら、詳細をお知らせください。';
+            questionElement4.innerHTML = 'ご意見ありがとうございます。お客様のご意見を元に改善し、<br>より良いお店を作り上げていきます。';
+            break;
+          case 'vietnam':
+            questionElement1.innerHTML = 'Trải nghiệm của bạn tại (tên nhà hàng) hôm nay thế nào?';
+            updateVisitOptions([
+              { value: '', text: 'Đây là lần thứ mấy bạn đến?' },
+              { value: 'first', text: 'Lần đầu tiên' },
+              { value: '2', text: 'Lần thứ 2' },
+              { value: '3', text: 'Lần thứ 3' },
+              { value: '4', text: 'Lần thứ 4' },
+              { value: '5', text: '5 lần trở lên' }
+            ]);
+            questionElement2.innerHTML = 'Nếu có điểm nào cần cải thiện, vui lòng cho chúng tôi biết chi tiết.';
+            updateLabel('label1', 'Cách đặt bàn không tốt');
+            updateLabel('label2', 'Dịch vụ không tốt');
+            updateLabel('label3', 'Món ăn không ngon');
+            updateLabel('label4', 'Món ăn đến muộn');
+            updateLabel('label5', 'Đồ uống đến muộn');
+            updateLabel('label6', 'Không có vấn đề gì');
+            questionElement3.innerHTML = 'Nếu có điểm nào cần cải thiện, vui lòng cho chúng tôi biết chi tiết.';
+            questionElement4.innerHTML = 'Cảm ơn bạn đã đóng góp ý kiến. Chúng tôi sẽ dựa trên những ý kiến của bạn để cải thiện và xây dựng một nhà hàng tốt hơn.';
+            break;
+          default:
+            questionElement1.innerHTML = 'How was your experience at UNAGIYOSAKURA_VIETNAM today?';
+            updateVisitOptions([
+              { value: '', text: 'How many times have you visited?' },
+              { value: 'first', text: 'First time' },
+              { value: '2', text: '2 times' },
+              { value: '3', text: '3 times' },
+              { value: '4', text: '4 times' },
+              { value: '5', text: '5 times or more' }
+            ]);
+            questionElement2.innerHTML = 'If you have any feedback on areas for improvement regarding our service, please let us know.';
+            updateLabel('label1', 'Reservation method is not satisfactory');
+            updateLabel('label2', 'Atmosphere is not good');
+            updateLabel('label3', 'Service is not satisfactory');
+            updateLabel('label4', 'Food is not tasty');
+            updateLabel('label5', 'Food is slow to arrive');
+            updateLabel('label6', 'Drinks are slow to arrive');
+            questionElement3.innerHTML = 'If there are specific areas to improve, please provide details below';
+            questionElement4.innerHTML = 'Thank you for your feedback. <br> We will use your comments to make improvements and create a better experience for our guests.';
+        }
+
+        // 質問2を表示する
+        document.getElementById('question1').classList.add('hidden');
+        document.getElementById('question1_5').classList.remove('hidden');
+      }
+    }
+    function initializeCustomSelect() {
+      const selectItems = document.querySelectorAll('.select-item');
+      const select = document.getElementById('experience-select');
+
+      selectItems.forEach(item => {
+        item.addEventListener('click', function () {
+          const value = this.getAttribute('data-value');
+          select.value = value;
+
+          // Remove 'selected' class from all items
+          selectItems.forEach(i => i.classList.remove('selected'));
+
+          // Add 'selected' class to the clicked item
+          this.classList.add('selected');
+        });
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const selectItems = document.querySelectorAll('.select-item');
+      const experienceSelect = document.getElementById('experience-select');
+      const submitButton = document.querySelector('input[type="submit"]');
+
+      selectItems.forEach(item => {
+        item.addEventListener('click', function () {
+          const value = this.getAttribute('data-value');
+          experienceSelect.value = value;
+
+
+          // Remove 'selected' class from all items
+          selectItems.forEach(el => el.classList.remove('selected'));
+
+          // Add 'selected' class to the clicked item
+          this.classList.add('selected');
+          // if (value === 'GOOD' || value === 'WOW！') {
+          // Enable and focus the submit button
+
+
+          if (value === 'WOW！') {
+            // GOODまたはWOW！の場合、フォームを送信
+            submitButton.disabled = false;
+            submitButton.click();
+          } else {
+            // それ以外の場合、次の質問に進む
+            showNextQuestion(value);
+          }
+
+
+          // }
+        });
+      });
+    });
+
+    // Run the initialization function when the DOM is fully loaded
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initializeCustomSelect);
+    } else {
+      initializeCustomSelect();
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      console.log(32);
+
+      const checkboxes = document.querySelectorAll('.custom-checkbox');
+
+      checkboxes.forEach(function (checkbox) {
+        checkbox.addEventListener('click', function (e) {
+          e.preventDefault(); // デフォルトのチェックボックスの動作を防ぐ
+          this.classList.toggle('checked');
+          const input = this.querySelector('input[type="checkbox"]');
+          input.checked = !input.checked; // 実際のチェックボックスの状態を切り替える
+
+          // 「Everything was good with no issues」が選択された場合の処理
+          if (input.value === "Everything was good with no issues") {
+            if (input.checked) {
+              // 他のすべての項目の選択を解除
+              checkboxes.forEach(function (otherCheckbox) {
+                if (otherCheckbox !== checkbox) {
+                  otherCheckbox.classList.remove('checked');
+                  otherCheckbox.querySelector('input[type="checkbox"]').checked = false;
+                }
+              });
+            }
+          } else {
+            // 他の項目が選択された場合、「Everything was good with no issues」の選択を解除
+            const everythingGoodCheckbox = document.querySelector('input[value="Everything was good with no issues"]').parentNode;
+            everythingGoodCheckbox.classList.remove('checked');
+            everythingGoodCheckbox.querySelector('input[type="checkbox"]').checked = false;
+          }
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>
